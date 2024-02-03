@@ -1,53 +1,53 @@
-- name: Install catalogue Component package
+- name: Install catalogue component
   hosts: catalogue
   become: yes
   tasks:
   - name: setup NPM source
-    ansible.builtin.shell: curl -sL https://rpm.nodesource.com/setup_lts.x | bash
-  
-  - name: Install Node-js
+    ansible.builtin.shell: "curl -sL https://rpm.nodesource.com/setup_lts.x | bash"
+
+  - name: Install NodeJS
     ansible.builtin.yum:
       name: nodejs
       state: installed
-  
-  - name: check roboshop user exists or not
+
+  - name: check roboshop user exist or not
     ansible.builtin.command: id roboshop
-    register: output # output is variable name
+    register: out #output is variable name
     ignore_errors: true
 
-  - name: create user roboshop
-    become: yes # giving sudo access
+  - when: out.rc != 0
+    name: create user roboshop
+    become: yes # we need sudo access for this task only
     ansible.builtin.user:
       name: roboshop
-    when: output.rc !=0
 
   - name: check /app directory exists or not
     ansible.builtin.stat:
       path: /app
     register: directory
 
-  - name: Print the directory exists stats
+  - name: print the directory stats
     ansible.builtin.debug:
-      msg: "Output: {{directory}}"
-  
+      msg: "output: {{directory}}"
+
   - when: directory.stat.exists == False
-    name: create /app directory 
+    name: create /app directory
     ansible.builtin.file:
       path: /app
       state: directory
-  
-  - name: Download catalogue artifact to /app
+
+  - name: download catalogue artifact
     ansible.builtin.get_url:
       url: https://roboshop-builds.s3.amazonaws.com/catalogue.zip
       dest: /tmp
 
-  - name: Extract catalogue artifact to /app
+  - name: extract catalogue artifact
     ansible.builtin.unarchive:
       src: /tmp/catalogue.zip
       dest: /app
       remote_src: yes
 
-  - name: Install dependencies
+  - name: install dependencies
     ansible.builtin.command: npm install
     args:
       chdir: /app
@@ -57,16 +57,16 @@
       src: catalogue.service
       dest: /etc/systemd/system/catalogue.service
 
-  - name: systemctl daemon-reload
+  - name: deamon reload
     ansible.builtin.systemd:
       daemon_reload: true
 
-  - name: copy mongo repo to yum.repo.d
+  - name: copy mongo repo to yum.repos.d
     ansible.builtin.copy:
       src: mongodb.repo
       dest: /etc/yum.repos.d/mongo.repo
 
-  - name: Install MongoDB client
+  - name: Install MongoDB
     ansible.builtin.yum:
       name: mongodb-org-shell
       state: installed
@@ -79,4 +79,7 @@
       name: catalogue
       state: restarted
       enabled: true
-      
+
+  
+
+  
