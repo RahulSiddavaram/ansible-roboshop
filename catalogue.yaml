@@ -5,4 +5,27 @@
   - name: setup NPM source
     ansible.builtin.shell: curl -sL https://rpm.nodesource.com/setup_lts.x | bash
   
+  - name: Install Node-js
+    ansible.builtin.yum:
+      name: nodejs
+      state: installed
+  
+  - name: check roboshop user exists or not
+    ansible.builtin.command: id roboshop
+    register: output # output is variable name
+    ignore_errors: true
 
+  - name: create user roboshop
+    become: yes # giving sudo access
+    ansible.builtin.user:
+      name: roboshop
+    when: output.rc !=0
+
+  - name: check the directory /app exists or not?
+    ansible.builtin.start:
+      path: /app
+    register: directory
+
+  - name: Print the directory exists stats
+    ansible.builtin.debug:
+      msg: "Output: {{directory}}"
