@@ -21,8 +21,8 @@
       name: roboshop
     when: output.rc !=0
 
-  - name: check the directory /app exists or not?
-    ansible.builtin.start:
+  - name: check /app directory exists or not
+    ansible.builtin.stat:
       path: /app
     register: directory
 
