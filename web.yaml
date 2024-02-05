@@ -6,6 +6,7 @@
     ansible.builtin.yum:
       name: nginx
       state: installed
+      
   - name: Start And Enable nginx
     ansible.builtin.service:
       name: nginx
@@ -27,7 +28,7 @@
       url: https://roboshop-builds.s3.amazonaws.com/web.zip
       dest: /tmp
 
-  - name: extract catalogue artifact
+  - name: extract web artifact
     ansible.builtin.unarchive:
       src: /tmp/web.zip
       dest: /usr/share/nginx/html
@@ -42,4 +43,3 @@
     ansible.builtin.service:
       name: nginx
       state: restarted
-      
