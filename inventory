@@ -24,3 +24,6 @@ shipping.rahuldevops.cloud
 
 [rabbitmq]
 rabbitmq.rahuldevops.cloud
+
+[payment]
+payment.rahuldevops.cloud
