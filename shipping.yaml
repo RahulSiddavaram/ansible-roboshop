@@ -5,7 +5,7 @@
   - name: Install shipping repo
     ansible.builtin.yum:
       name: maven
-      disable_gpg_check: true
+      state: installed
 
   - name: check roboshop user exist or not
     ansible.builtin.command: id roboshop
@@ -58,13 +58,16 @@
     ansible.builtin.systemd:
       daemon_reload: true
 
-  - name: restart catalogue
-    ansible.builtin.service:
-      name: catalogue
-      state: restarted
-      enabled: true
-
   - name: Install Mysql Client
     ansible.builtin.yum: 
       name:  mysql
       state: installed
+  
+  - name: load mysql schema
+    ansible.builtin.shell: mysql -h mysql.rahuldevops.cloud -uroot -pRoboShop@1 < /app/schema/shipping.sql 
+  
+  - name: restart shipping
+    ansible.builtin.service:
+      name: shipping
+      state: restarted
+      enabled: true
