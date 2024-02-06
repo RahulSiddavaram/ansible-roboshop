@@ -6,3 +6,6 @@ catalogue.rahuldevops.cloud
 
 [web]
 web.rahuldevops.cloud
+
+[redis]
+redis.rahuldevops.cloud
