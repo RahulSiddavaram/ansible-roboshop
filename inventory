@@ -13,5 +13,8 @@ redis.rahuldevops.cloud
 [user]
 user.rahuldevops.cloud
 
+[cart]
+cart.rahuldevops.cloud
+
 [mysql]
 mysql.rahuldevops.cloud
