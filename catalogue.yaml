@@ -79,7 +79,6 @@
       name: catalogue
       state: restarted
       enabled: true
-
-  
+          
 
   
