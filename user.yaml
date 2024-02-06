@@ -55,7 +55,7 @@
   - name: copy user service
     ansible.builtin.copy:
       src: user.service
-      dest: /etc/systemd/system/catalogue.service
+      dest: /etc/systemd/system/user.service
 
   - name: deamon reload
     ansible.builtin.systemd:
@@ -70,16 +70,9 @@
     ansible.builtin.yum:
       name: mongodb-org-shell
       state: installed
-
-  - name: load user data
-    ansible.builtin.command: mongo --host mongodb.rahuldevops.cloud < /app/schema/user.js
-
+      
   - name: restart user
     ansible.builtin.service:
       name: user
       state: restarted
       enabled: true
-
-  
-
-  
